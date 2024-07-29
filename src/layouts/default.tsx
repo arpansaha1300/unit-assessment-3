@@ -1,9 +1,21 @@
 import { Outlet } from 'react-router-dom'
+import Navbar from '~/components/Navbar'
+import Sidebar from '~/components/Sidebar'
 
 export default function DefaultLayout() {
   return (
-    <div className="min-h-screen">
-      <Outlet />
+    <div className="min-h-screen flex flex-col">
+      <Navbar />
+
+      <div className="flex-grow h-full grid grid-cols-6">
+        <div className="col-span-1 h-full">
+          <Sidebar />
+        </div>
+
+        <div className="col-span-5">
+          <Outlet />
+        </div>
+      </div>
     </div>
   )
 }
