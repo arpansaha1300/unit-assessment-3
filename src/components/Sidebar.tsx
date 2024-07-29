@@ -7,6 +7,7 @@ import {
 } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import classNames from '~/utils/classNames'
+import Divider from './common/Divider'
 
 interface ITab {
   type: 'tab'
@@ -74,7 +75,7 @@ export default function Sidebar() {
                 handleClick={() => handleClick(i)}
               />
             ) : (
-              <div className="h-px bg-gray-200" />
+              <Divider />
             )}
           </li>
         ))}
@@ -90,7 +91,9 @@ function SidebarTab(props: Readonly<SidebarTabProps>) {
     <button className="w-full hover:bg-gray-100 relative" onClick={handleClick}>
       {isActive && (
         <span
-          className={classNames('w-1.5 absolute left-0 inset-y-0 bg-red-400')}
+          className={classNames(
+            'w-1.5 absolute left-0 inset-y-0 bg-brand-primary'
+          )}
         />
       )}
       <div className="ml-1.5 p-2 flex items-center gap-4">
