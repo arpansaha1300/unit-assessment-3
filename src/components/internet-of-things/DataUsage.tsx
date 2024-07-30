@@ -1,18 +1,8 @@
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
 import Card from '~common/Card'
+import SelectMenu from '~common/SelectMenu'
 import Stats from './Stats'
 import BarChart from './BarChart'
-
-const stats = [
-  {
-    name: 'Total usage',
-    value: '617.93 GB',
-  },
-  {
-    name: 'Daily average',
-    value: '88 GB',
-  },
-]
 
 export default function DataUsage() {
   return (
@@ -21,7 +11,8 @@ export default function DataUsage() {
         <div className="py-2 flex items-center justify-between">
           <h2 className="text-lg font-bold">Data usage</h2>
           <div className="flex items-center gap-4">
-            <p className="text-xs">Last updated: May 6, 10:00 AM</p>
+            <SelectMenu label="View" list={list} />
+
             <ArrowTopRightOnSquareIcon className="flex-shrink-0 size-4" />
           </div>
         </div>
@@ -35,3 +26,29 @@ export default function DataUsage() {
     </section>
   )
 }
+
+const stats = [
+  {
+    name: 'Total usage',
+    value: '617.93 GB',
+  },
+  {
+    name: 'Daily average',
+    value: '88 GB',
+  },
+]
+
+const list = [
+  {
+    id: 1,
+    name: 'Last 7 days',
+  },
+  {
+    id: 2,
+    name: 'Last 3 months',
+  },
+  {
+    id: 3,
+    name: 'Last 6 months',
+  },
+]
