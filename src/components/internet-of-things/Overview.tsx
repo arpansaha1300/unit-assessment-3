@@ -12,6 +12,7 @@ interface IPieData {
 
 interface PieDataProps {
   pieData: IPieData
+  centerLabel: React.ReactNode
 }
 
 const stats = [
@@ -77,7 +78,15 @@ export default function Overview() {
             <h3 className="font-bold">SIMs status</h3>
             <p className="text-xs">Last updated: May 6, 10:00 AM</p>
 
-            <PieData pieData={pieData1} />
+            <PieData
+              pieData={pieData1}
+              centerLabel={
+                <>
+                  <p className="text-xl text-center font-bold">200K</p>
+                  <p className="text-xs text-center">Total SIMs</p>
+                </>
+              }
+            />
           </div>
 
           <div>
@@ -88,7 +97,15 @@ export default function Overview() {
             <h3 className="font-bold">SIMs connectivity</h3>
             <p className="text-xs">Last updated: May 6, 10:00 AM</p>
 
-            <PieData pieData={pieData2} />
+            <PieData
+              pieData={pieData2}
+              centerLabel={
+                <>
+                  <p className="text-xl text-center font-bold">200K</p>
+                  <p className="text-xs text-center">Active SIMs</p>
+                </>
+              }
+            />
           </div>
         </div>
       </Card>
@@ -97,11 +114,16 @@ export default function Overview() {
 }
 
 function PieData(props: Readonly<PieDataProps>) {
-  const { pieData } = props
+  const { pieData, centerLabel } = props
 
   return (
     <div className="pt-6 pb-4 flex gap-10">
-      <PieChart data={pieData.data} colors={pieData.colors} size={150} />
+      <PieChart
+        data={pieData.data}
+        colors={pieData.colors}
+        size={150}
+        centerLabel={centerLabel}
+      />
 
       <div className="flex items-center">
         <ul className="space-y-2">
