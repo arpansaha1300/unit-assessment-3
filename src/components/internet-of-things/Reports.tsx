@@ -1,12 +1,12 @@
 import { createElement, useState } from 'react'
 import {
+  ArrowDownTrayIcon,
   ArrowTopRightOnSquareIcon,
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
 } from '@heroicons/react/24/outline'
 import BaseInput from '~base/BaseInput'
 import Card from '~common/Card'
-import Table from '~common/Table'
 import classNames from '~/utils/classNames'
 
 interface PaginationIconProps {
@@ -16,13 +16,14 @@ interface PaginationIconProps {
 
 export default function Reports() {
   const [slicedData] = useState(data.slice(0, 8))
+  const [headings] = useState(Object.keys(slicedData[0]))
   const [page] = useState(1)
 
   return (
     <section>
       <Card>
         <div className="py-2 flex items-center justify-between">
-          <h2 className="text-lg font-bold">Reports</h2>
+          <h2 className="text-lg font-bold">Reports ({data.length})</h2>
           <ArrowTopRightOnSquareIcon className="flex-shrink-0 size-4" />
         </div>
 
@@ -38,11 +39,44 @@ export default function Reports() {
         </div>
 
         <div className="mt-6 px-2">
-          <Table
-            keyCol="email"
-            headings={Object.keys(slicedData[0])}
-            data={slicedData}
-          />
+          <table className="min-w-full divide-y divide-gray-300">
+            <thead className="font-semibold text-xs">
+              <tr>
+                {headings.map(heading => (
+                  <th
+                    key={heading}
+                    scope="col"
+                    className="px-4 first:pl-0 last:pr-0 py-3 text-left font-semibold text-gray-900"
+                  >
+                    {heading}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+
+            <tbody className="divide-y divide-gray-200 bg-white text-xs text-gray-600">
+              {slicedData.map((item: any, i) => (
+                <tr key={i}>
+                  {headings.map((heading, i) => (
+                    <td
+                      key={i}
+                      className="max-w-xs px-4 first:pl-0 last:pr-0 py-3"
+                    >
+                      <div className="font-medium text-gray-800 line-clamp-2">
+                        {item[heading]}
+                      </div>
+                    </td>
+                  ))}
+
+                  <td key={i} className="max-w-xs px-4 py-3">
+                    <button type="button">
+                      <ArrowDownTrayIcon className="flex-shrink-0 size-4" />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
 
           <div className="mt-5 mx-auto w-72 flex items-center justify-between">
             <PaginationIcon
