@@ -35,18 +35,18 @@ export function Component() {
         </div>
       </div>
 
-      <div className="mt-10 space-y-6">
-        <Overview />
-      </div>
+      <div className="mt-10 grid grid-cols-2 gap-5">
+        <div className="col-span-2">
+          <Overview />
+        </div>
 
-      <div className="mt-10 grid grid-cols-2 gap-4">
         <DataUsage />
 
         <TopUsage />
-      </div>
 
-      <div className="mt-10">
-        <Reports />
+        <div className="col-span-2">
+          <Reports />
+        </div>
       </div>
     </div>
   )

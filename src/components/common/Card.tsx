@@ -11,7 +11,7 @@ export default function Card(props: Readonly<CardProps>) {
   return (
     <div
       className={classNames(
-        'px-4 py-4 bg-white shadow ring-sm ring-black/10 rounded',
+        'px-4 py-4 bg-white shadow-md ring-sm ring-black/10 rounded',
         className
       )}
     >
