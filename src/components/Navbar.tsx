@@ -16,7 +16,7 @@ export default function Navbar() {
           <p>for business</p>
         </div>
       </div>
-      <div className="flex gap-8 text-gray-50 text-sm">
+      <div className="flex gap-8 text-gray-50 text-xs">
         <button className="p-2 flex items-center gap-2 hover:bg-gray-800 rounded">
           <MagnifyingGlassIcon className="flex-shrink-0 size-5" />
           <p>Search</p>

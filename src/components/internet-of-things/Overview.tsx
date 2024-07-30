@@ -2,6 +2,7 @@ import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
 import Card from '~common/Card'
 import Divider from '~common/Divider'
 import PieChart from '~/components/internet-of-things/PieChart'
+import Stats from './Stats'
 
 interface IPieData {
   data: any[]
@@ -69,17 +70,7 @@ export default function Overview() {
           </div>
         </div>
 
-        <div className="mt-4 grid grid-cols-3 gap-4">
-          {stats.map(stat => (
-            <div
-              key={stat.name}
-              className="p-4 border border-gray-300 rounded-lg"
-            >
-              <p className="text-sm">{stat.name}</p>
-              <p className="text-2xl font-bold">{stat.value}</p>
-            </div>
-          ))}
-        </div>
+        <Stats stats={stats} columns={3} className="mt-4" />
 
         <div className="mt-6 flex gap-8">
           <div className="flex-grow">

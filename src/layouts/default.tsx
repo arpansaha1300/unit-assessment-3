@@ -12,8 +12,12 @@ export default function DefaultLayout() {
           <Sidebar />
         </div>
 
-        <div className="col-span-5 px-10 py-6">
-          <Outlet />
+        <div className="col-span-5">
+          <div className="px-10 py-6">
+            <Outlet />
+          </div>
+
+          <div className="h-10 bg-gray-950" />
         </div>
       </div>
     </div>

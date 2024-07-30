@@ -5,7 +5,7 @@ interface DividerProps {
 }
 export default function Divider(props: Readonly<DividerProps>) {
   const { vertical = false } = props
-  console.log(vertical)
+
   return (
     <div
       className={classNames(

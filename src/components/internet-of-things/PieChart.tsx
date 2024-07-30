@@ -22,7 +22,7 @@ export default function PieChart(props: Readonly<PieChartProps>) {
         paddingAngle={data.length === 1 ? 0 : 5}
         dataKey="value"
       >
-        {data.map((entry, index) => (
+        {data.map((_, index) => (
           <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
         ))}
       </Pie>
