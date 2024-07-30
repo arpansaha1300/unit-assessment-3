@@ -75,7 +75,7 @@ export default function BarChart() {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <ReBarChart width={150} height={40} data={data} barSize={17}>
-        <CartesianGrid strokeDasharray="3 3" />
+        <CartesianGrid strokeDasharray="3 3" vertical={false} />
         <XAxis dataKey="name" className="text-xs text-gray-500" />
         <YAxis className="text-xs text-gray-500" />
         {/* <Tooltip /> */}
