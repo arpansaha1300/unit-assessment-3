@@ -47,9 +47,19 @@ export default function Reports() {
   const pageInputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
+    const regex = new RegExp(`(${searchValue})`, 'gi')
+    const tempData = searchValue
+      ? data.filter(
+          item =>
+            regex.test(item.reportCategory) ||
+            regex.test(item.reportDesc) ||
+            regex.test(item.source) ||
+            regex.test(item.reportName)
+        )
+      : data
     const startIdx = (page - 1) * rowsPerPage
-    setSlicedData(data.slice(startIdx, rowsPerPage))
-  }, [data, page])
+    setSlicedData(tempData.slice(startIdx, rowsPerPage))
+  }, [data, page, searchValue])
 
   useEffect(() => {
     setPageCount(Math.ceil(data.length / rowsPerPage))
@@ -94,54 +104,60 @@ export default function Reports() {
         </div>
 
         <div className="mt-6 px-2">
-          <table className="min-w-full divide-y divide-gray-300">
-            <thead className="font-semibold text-xs">
-              <tr>
-                {headings.map(heading => (
-                  <th
-                    key={heading}
-                    scope="col"
-                    className="px-4 first:pl-0 last:pr-0 py-3 text-left font-semibold text-gray-900"
-                  >
-                    {heading}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-
-            <tbody className="divide-y divide-gray-200 bg-white text-xs text-gray-600">
-              {slicedData.map((item: any, i) => (
-                <tr key={i}>
-                  {headings.map((heading, i) => (
-                    <td
-                      key={i}
-                      className="max-w-xs px-4 first:pl-0 last:pr-0 py-3"
+          {slicedData.length > 0 ? (
+            <table className="min-w-full divide-y divide-gray-300">
+              <thead className="font-semibold text-xs">
+                <tr>
+                  {headings.map(heading => (
+                    <th
+                      key={heading}
+                      scope="col"
+                      className="px-4 first:pl-0 last:pr-0 py-3 text-left font-semibold text-gray-900"
                     >
-                      <div className="font-medium text-gray-800 line-clamp-2">
-                        {i === 4 ? (
-                          formatDate(
-                            item[headingsMap[heading]],
-                            'dd/MM/yyyy hh:mm a'
-                          )
-                        ) : (
-                          <Highlight
-                            pattern={searchValue}
-                            str={item[headingsMap[heading]]}
-                          />
-                        )}
-                      </div>
-                    </td>
+                      {heading}
+                    </th>
                   ))}
-
-                  <td key={i} className="max-w-xs px-4 py-3">
-                    <button type="button">
-                      <ArrowDownTrayIcon className="flex-shrink-0 size-4" />
-                    </button>
-                  </td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody className="divide-y divide-gray-200 bg-white text-xs text-gray-600">
+                {slicedData.map((item: any, i) => (
+                  <tr key={i}>
+                    {headings.map((heading, i) => (
+                      <td
+                        key={i}
+                        className="max-w-xs px-4 first:pl-0 last:pr-0 py-3"
+                      >
+                        <div className="font-medium text-gray-800 line-clamp-2">
+                          {i === 4 ? (
+                            formatDate(
+                              item[headingsMap[heading]],
+                              'dd/MM/yyyy hh:mm a'
+                            )
+                          ) : (
+                            <Highlight
+                              pattern={searchValue}
+                              str={item[headingsMap[heading]]}
+                            />
+                          )}
+                        </div>
+                      </td>
+                    ))}
+
+                    <td key={i} className="max-w-xs px-4 py-3">
+                      <button type="button">
+                        <ArrowDownTrayIcon className="flex-shrink-0 size-4" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className="p-4">
+              <p className="text-center text-sm">No data available</p>
+            </div>
+          )}
 
           <div className="mt-5 mx-auto w-72 flex items-center justify-between">
             <PaginationIcon
