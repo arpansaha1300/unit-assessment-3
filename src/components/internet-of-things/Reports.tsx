@@ -1,4 +1,4 @@
-import { createElement, useState } from 'react'
+import { createElement, useEffect, useRef, useState } from 'react'
 import {
   ArrowDownTrayIcon,
   ArrowTopRightOnSquareIcon,
@@ -8,16 +8,61 @@ import {
 import BaseInput from '~base/BaseInput'
 import Card from '~common/Card'
 import classNames from '~/utils/classNames'
+import { iotReport } from '~/assets/data'
+import formatDate from '~/utils/formatDate'
+
+type TReportRow = (typeof iotReport.reportList)[number]['reportData'][number]
 
 interface PaginationIconProps {
   icon: any
   disabled?: boolean
 }
 
+const headingsMap = Object.freeze({
+  'Category': 'reportCategory',
+  'Reports': 'reportName',
+  'Source': 'source',
+  'Description': 'reportDesc',
+  'Last updated': 'lastReportDate',
+} as const)
+
+const headings = Object.freeze(
+  Object.keys(headingsMap)
+) as (keyof typeof headingsMap)[]
+
+const rowsPerPage = 10
+
 export default function Reports() {
-  const [slicedData] = useState(data.slice(0, 8))
-  const [headings] = useState(Object.keys(slicedData[0]))
-  const [page] = useState(1)
+  const [data] = useState(iotReport.reportList[0].reportData)
+  const [page, setPage] = useState(1)
+  const [pageCount, setPageCount] = useState(0)
+  const [slicedData, setSlicedData] = useState<TReportRow[]>([])
+
+  const pageInputRef = useRef<HTMLInputElement | null>(null)
+
+  useEffect(() => {
+    const startIdx = (page - 1) * rowsPerPage
+    setSlicedData(data.slice(startIdx, rowsPerPage))
+  }, [data, page])
+
+  useEffect(() => {
+    setPageCount(Math.ceil(data.length / rowsPerPage))
+  }, [data.length])
+
+  function onPageChange(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+
+    if (pageInputRef.current === null) return
+
+    const formData = new FormData(e.currentTarget)
+    let value = parseInt(formData.get('page') as string)
+
+    if (value < 1) value = 1
+    if (value > pageCount) value = pageCount
+
+    pageInputRef.current.value = value.toString()
+    setPage(value)
+  }
 
   return (
     <section>
@@ -63,7 +108,12 @@ export default function Reports() {
                       className="max-w-xs px-4 first:pl-0 last:pr-0 py-3"
                     >
                       <div className="font-medium text-gray-800 line-clamp-2">
-                        {item[heading]}
+                        {i === 4
+                          ? formatDate(
+                              item[headingsMap[heading]],
+                              'dd/MM/yyyy hh:mm a'
+                            )
+                          : item[headingsMap[heading]]}
                       </div>
                     </td>
                   ))}
@@ -87,15 +137,21 @@ export default function Reports() {
             <p className="text-xs inline-flex items-center gap-2">
               <span className="inline-block">Page</span>
 
-              <input
-                id="page"
-                name="page"
-                value={page}
-                className="inline appearance-none rounded-md p-2 placeholder-gray-600 focus:border-brand-primary focus:outline-none focus:ring-brand-primary text-xs font-semibold text-center shadow-sm ring-sm ring-opacity-20 border border-gray-600 transition-colors size-8"
-              />
+              <form onSubmit={onPageChange}>
+                <input
+                  ref={pageInputRef}
+                  id="page"
+                  name="page"
+                  type="number"
+                  inputMode="numeric"
+                  defaultValue={page}
+                  className="inline appearance-none rounded-md p-2 placeholder-gray-600 focus:border-brand-primary focus:outline-none focus:ring-brand-primary text-xs font-semibold text-center shadow-sm ring-sm ring-opacity-20 border border-gray-600 transition-colors size-8"
+                />
+                <button type="submit" className="sr-only" />
+              </form>
 
               <span className="inline-block">of</span>
-              <span className="inline-block font-semibold">13</span>
+              <span className="inline-block font-semibold">{pageCount}</span>
             </p>
 
             <PaginationIcon icon={ChevronDoubleRightIcon} />
@@ -129,94 +185,3 @@ function PaginationIcon(props: Readonly<PaginationIconProps>) {
     </button>
   )
 }
-
-const data = [
-  {
-    'Category': 'Financial',
-    'Reports': 'Q2 Earnings Report',
-    'Source': 'Company Financial Department',
-    'Description':
-      'A detailed report of the company’s financial performance for the second quarter. Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, architecto!',
-    'Last updated': '07/15/2024 03:45 PM (PST)',
-  },
-  {
-    'Category': 'Marketing',
-    'Reports': '2024 Marketing Strategy Overview',
-    'Source': 'Marketing Team',
-    'Description':
-      'Overview of the marketing strategies and campaigns planned for 2024.',
-    'Last updated': '07/20/2024 11:30 AM (PST)',
-  },
-  {
-    'Category': 'Product',
-    'Reports': 'New Product Launch Timeline',
-    'Source': 'Product Development Team',
-    'Description':
-      'Timeline and key milestones for the upcoming product launch. Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, architecto!',
-    'Last updated': '07/25/2024 09:15 AM (PST)',
-  },
-  {
-    'Category': 'Customer Service',
-    'Reports': 'Customer Satisfaction Survey Results',
-    'Source': 'Customer Service Department',
-    'Description':
-      'Results and analysis of the recent customer satisfaction survey. ',
-    'Last updated': '07/28/2024 04:00 PM (PST)',
-  },
-  {
-    'Category': 'HR',
-    'Reports': 'Employee Engagement Report',
-    'Source': 'Human Resources Department',
-    'Description':
-      'A report on employee engagement levels and related initiatives. Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi, architecto!',
-    'Last updated': '07/10/2024 08:00 AM (PST)',
-  },
-  {
-    'Category': 'IT',
-    'Reports': 'Cybersecurity Risk Assessment',
-    'Source': 'IT Security Team',
-    'Description':
-      'Assessment of cybersecurity risks and mitigation strategies.',
-    'Last updated': '07/30/2024 02:30 PM (PST)',
-  },
-  {
-    'Category': 'Sales',
-    'Reports': 'Monthly Sales Performance',
-    'Source': 'Sales Department',
-    'Description':
-      'Performance metrics and analysis of monthly sales activities.',
-    'Last updated': '07/29/2024 10:00 AM (PST)',
-  },
-  {
-    'Category': 'R&D',
-    'Reports': 'Innovation Pipeline Report',
-    'Source': 'Research and Development Team',
-    'Description':
-      'Current status and progress of ongoing innovation projects.',
-    'Last updated': '07/27/2024 01:15 PM (PST)',
-  },
-  {
-    'Category': 'Legal',
-    'Reports': 'Compliance Audit Results',
-    'Source': 'Legal Department',
-    'Description':
-      'Results of the recent compliance audit and necessary action items.',
-    'Last updated': '07/26/2024 03:00 PM (PST)',
-  },
-  {
-    'Category': 'Operations',
-    'Reports': 'Quarterly Operations Review',
-    'Source': 'Operations Team',
-    'Description':
-      'Review of operational efficiency and performance for the last quarter.',
-    'Last updated': '07/24/2024 12:45 PM (PST)',
-  },
-  {
-    'Category': 'Training',
-    'Reports': 'Employee Training Completion Report',
-    'Source': 'Training Department',
-    'Description':
-      'Completion rates and feedback from recent employee training sessions.',
-    'Last updated': '07/23/2024 09:00 AM (PST)',
-  },
-]

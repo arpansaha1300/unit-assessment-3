@@ -152,11 +152,18 @@ export const iotReport = {
           lastReportDate: '2024-07-01 00:00:00',
         },
         {
+          reportCategory: 'IOT',
+          reportName: 'report2',
+          source: 'Control Center',
+          reportDesc: 'Report 2 description',
+          lastReportDate: '2024-07-02 00:00:00',
+        },
+        {
           reportCategory: ' IOT',
           reportName: 'report3',
           source: 'Control Center',
           reportDesc: ' Report 3 description',
-          lastReportDate: '2024-07-02 00:00:00',
+          lastReportDate: '2024-07-03 00:00:00',
         },
         {
           reportCategory: ' IOT',
