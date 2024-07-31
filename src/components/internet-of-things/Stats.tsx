@@ -1,4 +1,5 @@
 import classNames from '~/utils/classNames'
+import kFormatter from '~/utils/kFormatter'
 
 interface StatsProps {
   stats: any[]
@@ -17,7 +18,7 @@ export default function Stats(props: Readonly<StatsProps>) {
       {stats.map(stat => (
         <div key={stat.name} className="p-4 border border-gray-300 rounded-lg">
           <p className="text-sm">{stat.name}</p>
-          <p className="text-2xl font-bold">{stat.value}</p>
+          <p className="text-2xl font-bold">{kFormatter(stat.value)}</p>
         </div>
       ))}
     </div>
