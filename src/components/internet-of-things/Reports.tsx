@@ -18,6 +18,11 @@ interface PaginationIconProps {
   disabled?: boolean
 }
 
+interface HighlightProps {
+  pattern: string
+  str: string
+}
+
 const headingsMap = Object.freeze({
   'Category': 'reportCategory',
   'Reports': 'reportName',
@@ -37,6 +42,7 @@ export default function Reports() {
   const [page, setPage] = useState(1)
   const [pageCount, setPageCount] = useState(0)
   const [slicedData, setSlicedData] = useState<TReportRow[]>([])
+  const [searchValue, setSearchValue] = useState('')
 
   const pageInputRef = useRef<HTMLInputElement | null>(null)
 
@@ -48,6 +54,8 @@ export default function Reports() {
   useEffect(() => {
     setPageCount(Math.ceil(data.length / rowsPerPage))
   }, [data.length])
+
+  useEffect(() => {}, [searchValue])
 
   function onPageChange(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -80,6 +88,8 @@ export default function Reports() {
             label="Search"
             srOnlyLabel
             placeholder="Search"
+            value={searchValue}
+            onChange={e => setSearchValue(e.target.value)}
           />
         </div>
 
@@ -108,12 +118,17 @@ export default function Reports() {
                       className="max-w-xs px-4 first:pl-0 last:pr-0 py-3"
                     >
                       <div className="font-medium text-gray-800 line-clamp-2">
-                        {i === 4
-                          ? formatDate(
-                              item[headingsMap[heading]],
-                              'dd/MM/yyyy hh:mm a'
-                            )
-                          : item[headingsMap[heading]]}
+                        {i === 4 ? (
+                          formatDate(
+                            item[headingsMap[heading]],
+                            'dd/MM/yyyy hh:mm a'
+                          )
+                        ) : (
+                          <Highlight
+                            pattern={searchValue}
+                            str={item[headingsMap[heading]]}
+                          />
+                        )}
                       </div>
                     </td>
                   ))}
@@ -183,5 +198,30 @@ function PaginationIcon(props: Readonly<PaginationIconProps>) {
     >
       {iconJsx}
     </button>
+  )
+}
+
+function Highlight({ pattern, str }: Readonly<HighlightProps>) {
+  if (pattern.trim() === '') return str
+
+  const regex = new RegExp(`(${pattern})`, 'gi')
+  const parts = str.split(regex)
+
+  if (parts.length === 0) {
+    return str
+  }
+
+  return (
+    <p>
+      {parts.filter(Boolean).map((part, i) =>
+        regex.test(part) ? (
+          <span key={i} className="font-semibold bg-yellow-200">
+            {part}
+          </span>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </p>
   )
 }
