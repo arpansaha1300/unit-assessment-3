@@ -16,6 +16,7 @@ type TReportRow = (typeof iotReport.reportList)[number]['reportData'][number]
 interface PaginationIconProps {
   icon: any
   disabled?: boolean
+  handleClick: () => void
 }
 
 interface HighlightProps {
@@ -39,6 +40,7 @@ const rowsPerPage = 10
 
 export default function Reports() {
   const [data] = useState(iotReport.reportList[0].reportData)
+  const [filteredData, setFilteredData] = useState(data)
   const [page, setPage] = useState(1)
   const [pageCount, setPageCount] = useState(0)
   const [slicedData, setSlicedData] = useState<TReportRow[]>([])
@@ -48,22 +50,28 @@ export default function Reports() {
 
   useEffect(() => {
     const regex = new RegExp(`(${searchValue})`, 'gi')
-    const tempData = searchValue
-      ? data.filter(
-          item =>
-            regex.test(item.reportCategory) ||
-            regex.test(item.reportDesc) ||
-            regex.test(item.source) ||
-            regex.test(item.reportName)
-        )
-      : data
-    const startIdx = (page - 1) * rowsPerPage
-    setSlicedData(tempData.slice(startIdx, rowsPerPage))
-  }, [data, page, searchValue])
+    let newData = data
+
+    if (searchValue) {
+      newData = data.filter(
+        item =>
+          regex.test(item.reportCategory) ||
+          regex.test(item.reportDesc) ||
+          regex.test(item.source) ||
+          regex.test(item.reportName)
+      )
+    }
+    setFilteredData(newData)
+  }, [searchValue, data])
 
   useEffect(() => {
-    setPageCount(Math.ceil(data.length / rowsPerPage))
-  }, [data.length])
+    const startIdx = (page - 1) * rowsPerPage
+    setSlicedData(filteredData.slice(startIdx, startIdx + rowsPerPage))
+  }, [filteredData, page, searchValue])
+
+  useEffect(() => {
+    setPageCount(Math.ceil(filteredData.length / rowsPerPage))
+  }, [filteredData.length])
 
   useEffect(() => {}, [searchValue])
 
@@ -80,6 +88,22 @@ export default function Reports() {
 
     pageInputRef.current.value = value.toString()
     setPage(value)
+  }
+
+  function incPage() {
+    setPage(x => {
+      const next = x + 1
+      if (pageInputRef.current) pageInputRef.current.value = next.toString()
+      return next
+    })
+  }
+
+  function decPage() {
+    setPage(x => {
+      const next = x - 1
+      if (pageInputRef.current) pageInputRef.current.value = next.toString()
+      return next
+    })
   }
 
   return (
@@ -163,6 +187,7 @@ export default function Reports() {
             <PaginationIcon
               disabled={page === 1}
               icon={ChevronDoubleLeftIcon}
+              handleClick={decPage}
             />
 
             <p className="text-xs inline-flex items-center gap-2">
@@ -185,7 +210,11 @@ export default function Reports() {
               <span className="inline-block font-semibold">{pageCount}</span>
             </p>
 
-            <PaginationIcon icon={ChevronDoubleRightIcon} />
+            <PaginationIcon
+              disabled={page === pageCount}
+              icon={ChevronDoubleRightIcon}
+              handleClick={incPage}
+            />
           </div>
         </div>
       </Card>
@@ -194,7 +223,7 @@ export default function Reports() {
 }
 
 function PaginationIcon(props: Readonly<PaginationIconProps>) {
-  const { icon, disabled } = props
+  const { icon, disabled, handleClick } = props
 
   const iconJsx = createElement(icon, {
     className: classNames(
@@ -211,6 +240,7 @@ function PaginationIcon(props: Readonly<PaginationIconProps>) {
           ? 'cursor-default border-gray-400'
           : 'border-gray-600 hover:text-gray-800 hover:bg-gray-100'
       )}
+      onClick={handleClick}
     >
       {iconJsx}
     </button>
