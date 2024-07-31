@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  useContext,
-  useState,
-  ReactNode,
-  useMemo,
-} from 'react'
+import { createContext, useContext, useState, useMemo, useEffect } from 'react'
 
 interface AccordionButtonRenderProps {
   open: boolean | null
@@ -24,16 +18,13 @@ interface AccordionPanelProps {
 
 interface AccordionProps {
   className?: string
+  shouldOpen?: boolean
   children: React.ReactNode
 }
 
 interface AccordionContextType {
   open: boolean | null
   setOpen: React.Dispatch<React.SetStateAction<boolean | null>>
-}
-
-interface AccordionProviderProps {
-  children: ReactNode
 }
 
 const AccordionContext = createContext<AccordionContextType | undefined>(
@@ -50,25 +41,20 @@ const useAccordionContext = (): AccordionContextType => {
   return context
 }
 
-const AccordionProvider: React.FC<AccordionProviderProps> = ({ children }) => {
-  const [open, setOpen] = useState<boolean | null>(null)
+export function Accordion(props: Readonly<AccordionProps>) {
+  const { className, shouldOpen = false, children } = props
 
+  const [open, setOpen] = useState<boolean | null>(shouldOpen)
   const value = useMemo(() => ({ open, setOpen }), [open])
+
+  useEffect(() => {
+    if (shouldOpen) setOpen(shouldOpen)
+  }, [shouldOpen])
 
   return (
     <AccordionContext.Provider value={value}>
-      {children}
-    </AccordionContext.Provider>
-  )
-}
-
-export function Accordion(props: Readonly<AccordionProps>) {
-  const { className, children } = props
-
-  return (
-    <AccordionProvider>
       <div className={className}>{children}</div>
-    </AccordionProvider>
+    </AccordionContext.Provider>
   )
 }
 

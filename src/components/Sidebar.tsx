@@ -155,8 +155,18 @@ function SidebarTab(props: Readonly<SidebarTabProps>) {
 function SidebarAccordion(props: Readonly<SidebarAccordionProps>) {
   const { tabs, name, icon } = props
 
+  const location = useLocation()
+
+  const hasOpenRoute = useMemo(() => {
+    for (const tab of tabs) {
+      if (tab.path === location.pathname) {
+        return true
+      }
+    }
+  }, [location.pathname, tabs])
+
   return (
-    <Accordion>
+    <Accordion shouldOpen={hasOpenRoute}>
       <AccordionButton className="flex items-center justify-between w-full hover:bg-gray-100 relative">
         {({ open }) => (
           <>
