@@ -2,51 +2,24 @@ import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/20/solid'
 import { useState } from 'react'
 import classNames from '~/utils/classNames'
 import Card from '~common/Card'
+import { iotTopUsage } from '~/assets/data'
 
 interface StatusProps {
   active: boolean
 }
 
-const data = [
-  {
-    MSISDN: '1234567890123456',
-    Status: <Status active={true} />,
-    Usage: '10GB',
-  },
-  {
-    MSISDN: '1234567890123456',
-    Status: <Status active={true} />,
-    Usage: '10GB',
-  },
-  {
-    MSISDN: '1234567890123456',
-    Status: <Status active={true} />,
-    Usage: '10GB',
-  },
-  {
-    MSISDN: '1234567890123456',
-    Status: <Status active={false} />,
-    Usage: '10GB',
-  },
-  {
-    MSISDN: '1234567890123456',
-    Status: <Status active={false} />,
-    Usage: '10GB',
-  },
-  {
-    MSISDN: '1234567890123456',
-    Status: <Status active={true} />,
-    Usage: '10GB',
-  },
-  {
-    MSISDN: '1234567890123456',
-    Status: <Status active={false} />,
-    Usage: '10GB',
-  },
-]
+const headingsMap = Object.freeze({
+  MSISDN: 'mobileNumber',
+  Status: 'mobileNumberStatus',
+  Usage: 'dataUsage',
+} as const)
+
+const headings = Object.freeze(
+  Object.keys(headingsMap)
+) as (keyof typeof headingsMap)[]
 
 export default function TopUsage() {
-  const [headings] = useState(Object.keys(data[0]))
+  const [data] = useState(iotTopUsage.usageDataList[0].usages)
 
   return (
     <section className="h-full">
@@ -77,7 +50,13 @@ export default function TopUsage() {
                       key={i}
                       className="max-w-12 px-4 first:pl-0 last:pr-0 py-3 truncate font-medium text-gray-800"
                     >
-                      {item[heading]}
+                      {i === 1 ? (
+                        <Status
+                          active={item[headingsMap[heading]] === 'Active'}
+                        />
+                      ) : (
+                        item[headingsMap[heading]]
+                      )}
                     </td>
                   ))}
                 </tr>
