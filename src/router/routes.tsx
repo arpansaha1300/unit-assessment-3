@@ -12,6 +12,10 @@ const Home = () => import('../pages/index.jsx')
 const routes = createRoutesFromElements(
   <Route element={<DefaultLayout />}>
     <Route path="/" lazy={Home} />
+    <Route path="/iot" lazy={Home} />
+    <Route path="/network" lazy={Home} />
+    <Route path="/settings" lazy={Home} />
+    <Route path="/favorites" lazy={Home} />
   </Route>
 )
 
