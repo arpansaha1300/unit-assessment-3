@@ -66,7 +66,7 @@ export default function Overview(props: Readonly<OverviewProps>) {
   return (
     <section>
       <Card>
-        <div className="py-2 flex items-center justify-between">
+        <div className="py-2 flex flex-col sm:flex-row sm:items-center gap-1 justify-between">
           <h2 className="text-lg font-bold">Overview</h2>
           <div className="flex items-center gap-4">
             <p className="text-xs">
@@ -141,7 +141,7 @@ function PieData(props: Readonly<PieDataProps>) {
   const colors = ['#F6288F', '#0A3B52', '#45A0B5']
 
   return (
-    <div className="pt-6 pb-4 flex gap-10">
+    <div className="pt-6 pb-4 flex flex-col items-center sm:flex-row gap-4 sm:gap-10">
       <PieChart
         data={pieData}
         colors={colors}

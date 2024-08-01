@@ -132,7 +132,7 @@ export default function Reports() {
             </div>
           )}
 
-          <div className="mt-5 mx-auto w-72 flex items-center justify-between">
+          <div className="mt-5 mx-auto w-60 sm:w-72 flex items-center justify-between">
             <PaginationIcon
               disabled={page === 1}
               icon={ChevronDoubleLeftIcon}
@@ -230,14 +230,14 @@ function ReportsTable(props: Readonly<ReportsTableProps>) {
           </th>
           <th
             scope="col"
-            className="pl-4 py-3 text-left font-semibold text-gray-900"
+            className="hidden sm:table-cell pl-4 py-3 text-left font-semibold text-gray-900"
           >
             Last updated
           </th>
         </tr>
       </thead>
 
-      <tbody className="divide-y divide-gray-200 bg-white text-xs text-gray-800 font-medium">
+      <tbody className="divide-y divide-gray-200 bg-white text-xs text-gray-800 sm:font-medium">
         {data.map((item, i) => (
           <tr key={i}>
             <td className="hidden lg:table-cell max-w-xs pr-4 py-3">
@@ -268,7 +268,7 @@ function ReportsTable(props: Readonly<ReportsTableProps>) {
               <Highlight
                 pattern={searchValue}
                 str={item.reportDesc}
-                className="block lg:hidden mt-1 line-clamp-1"
+                className="block lg:hidden text-gray-500 mt-1 line-clamp-1"
               />
             </td>
             <td className="hidden lg:table-cell max-w-xs px-4 py-3">
@@ -279,7 +279,7 @@ function ReportsTable(props: Readonly<ReportsTableProps>) {
                 <Highlight pattern={searchValue} str={item.reportDesc} />
               </div>
             </td>
-            <td className="max-w-xs px-4 py-3">
+            <td className="hidden sm:table-cell max-w-xs px-4 py-3">
               <div className="line-clamp-2">
                 <p className="hidden lg:block">
                   {formatDate(item.lastReportDate, 'dd/MM/yyyy hh:mm a')}
@@ -293,7 +293,7 @@ function ReportsTable(props: Readonly<ReportsTableProps>) {
               </div>
             </td>
 
-            <td key={i} className="max-w-xs px-4 py-3">
+            <td key={i} className="max-w-xs px-2 sm:px-4 py-3">
               <button type="button">
                 <ArrowDownTrayIcon className="flex-shrink-0 size-4" />
               </button>

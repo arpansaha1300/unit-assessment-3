@@ -17,7 +17,7 @@ const Container = forwardRef(
       {
         ref,
         className: classNames(
-          'mx-auto px-4 xs:max-w-md sm:max-w-xl sm:px-6 lg:px-4 xl:px-0 md:max-w-5xl xl:max-w-6xl',
+          'mx-auto px-4 xs:max-w-md sm:max-w-xl sm:px-6 lg:px-4 xl:px-0 sm:max-w-5xl xl:max-w-6xl',
           className
         ),
         ...rest,

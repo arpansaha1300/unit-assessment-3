@@ -65,7 +65,7 @@ export default function DataUsage() {
       <Card className="flex flex-col h-full">
         <div className="py-2 flex items-center justify-between">
           <h2 className="text-lg font-bold">Data usage</h2>
-          <div className="flex items-center gap-4">
+          <div className="hidden sm:flex items-center gap-4">
             <SelectMenu
               label="View"
               list={selectMenulist}
@@ -75,6 +75,17 @@ export default function DataUsage() {
 
             <ArrowTopRightOnSquareIcon className="flex-shrink-0 size-4" />
           </div>
+
+          <ArrowTopRightOnSquareIcon className="block sm:hidden flex-shrink-0 size-4" />
+        </div>
+
+        <div className="my-4 sm:hidden">
+          <SelectMenu
+            label="View"
+            list={selectMenulist}
+            selected={selected}
+            setSelected={setSelected}
+          />
         </div>
 
         <Stats stats={stats} columns={2} className="mt-4" />

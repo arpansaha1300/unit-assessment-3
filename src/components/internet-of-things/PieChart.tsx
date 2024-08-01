@@ -12,7 +12,7 @@ export default function PieChart(props: Readonly<PieChartProps>) {
   const { data, colors, size, thickness = 15, centerLabel } = props
 
   return (
-    <div className="relative">
+    <div className="relative w-max">
       <RePieChart width={size} height={size}>
         <Pie
           data={data}

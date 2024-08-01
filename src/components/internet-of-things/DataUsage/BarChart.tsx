@@ -41,7 +41,7 @@ const renderCustomizedLabel = (props: any) => {
       textAnchor="middle"
       dominantBaseline="middle"
       fill="#6b7280"
-      className="text-xs"
+      className="hidden sm:block text-xs"
     >
       {value} GB
     </text>
@@ -61,7 +61,7 @@ export default function BarChart(props: Readonly<BarChartProps>) {
         margin={{
           top: 10,
           right: 0,
-          left: 0,
+          left: -15,
           bottom: 10,
         }}
       >

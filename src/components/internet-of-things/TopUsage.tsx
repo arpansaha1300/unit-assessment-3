@@ -55,7 +55,7 @@ export default function TopUsage() {
                   {headings.map((heading, i) => (
                     <td
                       key={i}
-                      className="max-w-12 px-4 first:pl-0 last:pr-0 py-3 truncate font-medium text-gray-800"
+                      className="px-4 first:pl-0 last:pr-0 py-3 truncate font-medium text-gray-800"
                     >
                       {i === 1 ? (
                         <Status
