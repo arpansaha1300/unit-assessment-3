@@ -56,6 +56,8 @@ export default function Reports() {
       )
     }
     setFilteredData(newData)
+    setPage(1)
+    if (pageInputRef.current) pageInputRef.current.value = String(1)
   }, [searchValue, data])
 
   useEffect(() => {
