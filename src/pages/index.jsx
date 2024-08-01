@@ -19,7 +19,7 @@ export function Component() {
     },
     {
       name: 'Internet of things',
-      path: '/internet-of-things',
+      path: '/iot',
     },
   ]
 
@@ -27,10 +27,10 @@ export function Component() {
     <div>
       <Breadcrumb items={breadcrumbItems} />
 
-      <div className="mt-4 flex items-center justify-between">
+      <div className="mt-4 lg:flex lg:items-center lg:justify-between">
         <h1 className="text-3xl font-bold">Internet of Things Dashboard</h1>
 
-        <div className="flex items-center gap-6">
+        <div className="mt-4 lg:mt-0 flex items-center justify-between lg:justify-normal gap-6">
           <p className="text-sm font-semibold">Account number: 1234567899</p>
           <button
             className="px-2 py-1.5 text-sm font-semibold border-2 border-gray-950 hover:bg-gray-100 inline-flex items-center gap-1 rounded transition-colors"
@@ -47,9 +47,9 @@ export function Component() {
         </div>
       </div>
 
-      <div className="mt-10 grid grid-cols-2 gap-5">
+      <div className="mt-6 lg:mt-10 grid grid-cols-1 lg:grid-cols-2 gap-5">
         {iotOverview.deviceDetailsExperience.map((details, i) => (
-          <div key={i} className="col-span-2">
+          <div key={i} className="lg:col-span-2">
             <Overview deviceDetails={details} />
           </div>
         ))}
@@ -58,7 +58,7 @@ export function Component() {
 
         <TopUsage />
 
-        <div className="col-span-2">
+        <div className="lg:col-span-2">
           <Reports />
         </div>
       </div>

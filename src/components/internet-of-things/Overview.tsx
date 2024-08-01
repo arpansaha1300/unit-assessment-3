@@ -26,15 +26,15 @@ export default function Overview(props: Readonly<OverviewProps>) {
     () => [
       {
         name: 'Total SIMs',
-        value: deviceDetails.sims.totalSimCount,
+        value: kFormatter(deviceDetails.sims.totalSimCount),
       },
       {
         name: 'Active SIMs',
-        value: deviceDetails.sims.active,
+        value: kFormatter(deviceDetails.sims.active),
       },
       {
         name: 'Inactive SIMs',
-        value: deviceDetails.sims.inactive,
+        value: kFormatter(deviceDetails.sims.inactive),
       },
     ],
     [deviceDetails.sims]
@@ -79,7 +79,7 @@ export default function Overview(props: Readonly<OverviewProps>) {
 
         <Stats stats={stats} columns={3} className="mt-4" />
 
-        <div className="mt-6 flex gap-8">
+        <div className="mt-6 flex flex-col lg:flex-row gap-4 lg:gap-8">
           <div className="flex-grow">
             <h3 className="font-bold">SIMs status</h3>
             <p className="text-xs">
@@ -101,8 +101,12 @@ export default function Overview(props: Readonly<OverviewProps>) {
             />
           </div>
 
-          <div>
+          <div className="hidden lg:block">
             <Divider vertical />
+          </div>
+
+          <div className="lg:hidden">
+            <Divider />
           </div>
 
           <div className="flex-grow">

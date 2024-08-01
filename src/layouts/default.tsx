@@ -7,13 +7,13 @@ export default function DefaultLayout() {
     <div className="min-h-screen flex flex-col">
       <Navbar />
 
-      <div className="flex-grow h-full grid grid-cols-6">
-        <div className="col-span-1 h-full">
+      <div className="flex-grow h-full grid grid-cols-7 lg:grid-cols-6">
+        <div className="col-span-2 lg:col-span-1 h-full">
           <Sidebar />
         </div>
 
         <div className="col-span-5">
-          <div className="px-10 py-6">
+          <div className="px-8 lg:px-10 py-6">
             <Outlet />
           </div>
 

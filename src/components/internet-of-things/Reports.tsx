@@ -19,22 +19,16 @@ interface PaginationIconProps {
   handleClick: () => void
 }
 
+interface ReportsTableProps {
+  data: (typeof iotReport)['reportList'][number]['reportData']
+  searchValue: string
+}
+
 interface HighlightProps {
   pattern: string
   str: string
+  className?: string
 }
-
-const headingsMap = Object.freeze({
-  'Category': 'reportCategory',
-  'Reports': 'reportName',
-  'Source': 'source',
-  'Description': 'reportDesc',
-  'Last updated': 'lastReportDate',
-} as const)
-
-const headings = Object.freeze(
-  Object.keys(headingsMap)
-) as (keyof typeof headingsMap)[]
 
 const rowsPerPage = 10
 
@@ -129,54 +123,7 @@ export default function Reports() {
 
         <div className="mt-6 px-2">
           {slicedData.length > 0 ? (
-            <table className="min-w-full divide-y divide-gray-300">
-              <thead className="font-semibold text-xs">
-                <tr>
-                  {headings.map(heading => (
-                    <th
-                      key={heading}
-                      scope="col"
-                      className="px-4 first:pl-0 last:pr-0 py-3 text-left font-semibold text-gray-900"
-                    >
-                      {heading}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-
-              <tbody className="divide-y divide-gray-200 bg-white text-xs text-gray-600">
-                {slicedData.map((item: any, i) => (
-                  <tr key={i}>
-                    {headings.map((heading, i) => (
-                      <td
-                        key={i}
-                        className="max-w-xs px-4 first:pl-0 last:pr-0 py-3"
-                      >
-                        <div className="font-medium text-gray-800 line-clamp-2">
-                          {i === 4 ? (
-                            formatDate(
-                              item[headingsMap[heading]],
-                              'dd/MM/yyyy hh:mm a'
-                            )
-                          ) : (
-                            <Highlight
-                              pattern={searchValue}
-                              str={item[headingsMap[heading]]}
-                            />
-                          )}
-                        </div>
-                      </td>
-                    ))}
-
-                    <td key={i} className="max-w-xs px-4 py-3">
-                      <button type="button">
-                        <ArrowDownTrayIcon className="flex-shrink-0 size-4" />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <ReportsTable data={slicedData} searchValue={searchValue} />
           ) : (
             <div className="p-4">
               <p className="text-center text-sm">No data available</p>
@@ -190,7 +137,7 @@ export default function Reports() {
               handleClick={decPage}
             />
 
-            <p className="text-xs inline-flex items-center gap-2">
+            <div className="text-xs inline-flex items-center gap-2">
               <span className="inline-block">Page</span>
 
               <form onSubmit={onPageChange}>
@@ -208,7 +155,7 @@ export default function Reports() {
 
               <span className="inline-block">of</span>
               <span className="inline-block font-semibold">{pageCount}</span>
-            </p>
+            </div>
 
             <PaginationIcon
               disabled={page === pageCount}
@@ -240,6 +187,7 @@ function PaginationIcon(props: Readonly<PaginationIconProps>) {
           ? 'cursor-default border-gray-400'
           : 'border-gray-600 hover:text-gray-800 hover:bg-gray-100'
       )}
+      disabled={disabled}
       onClick={handleClick}
     >
       {iconJsx}
@@ -247,18 +195,126 @@ function PaginationIcon(props: Readonly<PaginationIconProps>) {
   )
 }
 
-function Highlight({ pattern, str }: Readonly<HighlightProps>) {
-  if (pattern.trim() === '') return str
+function ReportsTable(props: Readonly<ReportsTableProps>) {
+  const { data, searchValue } = props
+
+  return (
+    <table className="min-w-full divide-y divide-gray-300">
+      <thead className="font-semibold text-xs">
+        <tr>
+          <th
+            scope="col"
+            className="hidden lg:table-cell pr-4 py-3 text-left font-semibold text-gray-900"
+          >
+            Category
+          </th>
+          <th
+            scope="col"
+            className="lg:pl-4 pr-4 py-3 text-left font-semibold text-gray-900"
+          >
+            Reports
+          </th>
+          <th
+            scope="col"
+            className="hidden lg:table-cell px-4 py-3 text-left font-semibold text-gray-900"
+          >
+            Source
+          </th>
+          <th
+            scope="col"
+            className="hidden lg:table-cell px-4 py-3 text-left font-semibold text-gray-900"
+          >
+            Description
+          </th>
+          <th
+            scope="col"
+            className="pl-4 py-3 text-left font-semibold text-gray-900"
+          >
+            Last updated
+          </th>
+        </tr>
+      </thead>
+
+      <tbody className="divide-y divide-gray-200 bg-white text-xs text-gray-600">
+        {data.map((item, i) => (
+          <tr key={i}>
+            <td className="hidden lg:table-cell max-w-xs pr-4 py-3">
+              <Highlight pattern={searchValue} str={item.reportCategory} />
+            </td>
+            <td className="max-w-xs pl-0 lg:pl-4 pr-4 py-3">
+              <Highlight
+                pattern={searchValue}
+                str={item.reportName}
+                className="block font-bold lg:font-normal"
+              />
+              <div className="mt-1 lg:hidden">
+                <span className="font-medium">Category: </span>
+                <Highlight
+                  pattern={searchValue}
+                  str={item.reportCategory}
+                  className="inline"
+                />
+              </div>
+              <div className="mt-1 lg:hidden">
+                <span className="font-medium">Source: </span>
+                <Highlight
+                  pattern={searchValue}
+                  str={item.source}
+                  className="inline"
+                />
+              </div>
+              <Highlight
+                pattern={searchValue}
+                str={item.reportDesc}
+                className="block lg:hidden mt-1 line-clamp-1"
+              />
+            </td>
+            <td className="hidden lg:table-cell max-w-xs px-4 py-3">
+              <Highlight pattern={searchValue} str={item.source} />
+            </td>
+            <td className="hidden lg:table-cell max-w-xs px-4 py-3">
+              <div className="font-medium text-gray-800 line-clamp-2">
+                <Highlight pattern={searchValue} str={item.reportDesc} />
+              </div>
+            </td>
+            <td className="max-w-xs px-4 py-3">
+              <div className="font-medium text-gray-700 line-clamp-2">
+                <p className="hidden lg:block">
+                  {formatDate(item.lastReportDate, 'dd/MM/yyyy hh:mm a')}
+                </p>
+                <p className="lg:hidden">
+                  {formatDate(item.lastReportDate, 'dd/MM/yyyy')}
+                </p>
+                <p className="lg:hidden">
+                  {formatDate(item.lastReportDate, 'hh:mm a')}
+                </p>
+              </div>
+            </td>
+
+            <td key={i} className="max-w-xs px-4 py-3">
+              <button type="button">
+                <ArrowDownTrayIcon className="flex-shrink-0 size-4" />
+              </button>
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )
+}
+
+function Highlight({ pattern, str, className }: Readonly<HighlightProps>) {
+  if (pattern.trim() === '') return <p className={className}>{str}</p>
 
   const regex = new RegExp(`(${pattern})`, 'gi')
   const parts = str.split(regex)
 
   if (parts.length === 0) {
-    return str
+    return <p className={className}>{str}</p>
   }
 
   return (
-    <p>
+    <p className={className}>
       {parts.filter(Boolean).map((part, i) =>
         regex.test(part) ? (
           <span key={i} className="font-semibold bg-yellow-200">
