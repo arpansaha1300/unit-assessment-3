@@ -55,14 +55,16 @@ export default function TopUsage() {
                   {headings.map((heading, i) => (
                     <td
                       key={i}
-                      className="px-4 first:pl-0 last:pr-0 py-3 truncate font-medium text-gray-800"
+                      className="px-4 first:pl-0 last:pr-0 py-3 font-medium text-gray-800"
                     >
                       {i === 1 ? (
                         <Status
                           active={item[headingsMap[heading]] === 'Active'}
                         />
                       ) : (
-                        item[headingsMap[heading]]
+                        <p className="max-w-[8ch] md:max-w-[15ch] truncate">
+                          {item[headingsMap[heading]]}
+                        </p>
                       )}
                     </td>
                   ))}
