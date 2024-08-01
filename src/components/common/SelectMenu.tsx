@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import {
   Label,
   Listbox,
@@ -14,18 +13,20 @@ import classNames from '~/utils/classNames'
 interface ListItem {
   id: number
   name: string
+  value: number
+  unit: any
 }
 
 interface SelectMenuProps {
   list: ListItem[]
   label: string
+  selected: ListItem
+  setSelected: React.Dispatch<React.SetStateAction<ListItem>>
   srOnlyLabel?: boolean
 }
 
 export default function SelectMenu(props: Readonly<SelectMenuProps>) {
-  const { list, label, srOnlyLabel = false } = props
-
-  const [selected, setSelected] = useState(list[0])
+  const { list, label, srOnlyLabel = false, selected, setSelected } = props
 
   return (
     <Listbox
