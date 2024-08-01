@@ -6,20 +6,18 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react'
-import {
-  ArrowRightIcon,
-  ArrowTopRightOnSquareIcon,
-} from '@heroicons/react/24/outline'
+import { ArrowRightIcon } from '@heroicons/react/24/outline'
 
 interface DrawerProps {
   open: boolean
   title: string
   children: React.ReactNode
   setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  headerIcon?: React.ReactNode
 }
 
 export default function Drawer(props: Readonly<DrawerProps>) {
-  const { open, title, children, setOpen } = props
+  const { open, title, children, setOpen, headerIcon } = props
 
   return (
     <Dialog open={open} onClose={setOpen} className="relative z-10">
@@ -41,7 +39,7 @@ export default function Drawer(props: Readonly<DrawerProps>) {
                     <DialogTitle className="text-lg font-semibold leading-6 text-gray-900">
                       {title}
                     </DialogTitle>
-                    <ArrowTopRightOnSquareIcon className="flex-shrink-0 size-5 text-gray-600" />
+                    {headerIcon}
                   </div>
                   <button
                     type="button"
