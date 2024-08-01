@@ -34,9 +34,7 @@ const AccordionContext = createContext<AccordionContextType | undefined>(
 const useAccordionContext = (): AccordionContextType => {
   const context = useContext(AccordionContext)
   if (!context) {
-    throw new Error(
-      'useAccordionContext must be used within an AccordionProvider'
-    )
+    throw new Error('useAccordionContext must be used within an Accordion')
   }
   return context
 }
@@ -67,7 +65,7 @@ export function AccordionButton(props: Readonly<AccordionButtonProps>) {
   }
 
   return (
-    <button className={className} onClick={handleClick}>
+    <button type="button" className={className} onClick={handleClick}>
       {children instanceof Function ? children({ open }) : children}
     </button>
   )

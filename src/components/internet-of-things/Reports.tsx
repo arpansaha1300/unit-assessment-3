@@ -235,7 +235,7 @@ function ReportsTable(props: Readonly<ReportsTableProps>) {
         </tr>
       </thead>
 
-      <tbody className="divide-y divide-gray-200 bg-white text-xs text-gray-600">
+      <tbody className="divide-y divide-gray-200 bg-white text-xs text-gray-800 font-medium">
         {data.map((item, i) => (
           <tr key={i}>
             <td className="hidden lg:table-cell max-w-xs pr-4 py-3">
@@ -245,7 +245,7 @@ function ReportsTable(props: Readonly<ReportsTableProps>) {
               <Highlight
                 pattern={searchValue}
                 str={item.reportName}
-                className="block font-bold lg:font-normal"
+                className="block font-bold lg:font-medium"
               />
               <div className="mt-1 lg:hidden">
                 <span className="font-medium">Category: </span>
@@ -273,12 +273,12 @@ function ReportsTable(props: Readonly<ReportsTableProps>) {
               <Highlight pattern={searchValue} str={item.source} />
             </td>
             <td className="hidden lg:table-cell max-w-xs px-4 py-3">
-              <div className="font-medium text-gray-800 line-clamp-2">
+              <div className="line-clamp-2">
                 <Highlight pattern={searchValue} str={item.reportDesc} />
               </div>
             </td>
             <td className="max-w-xs px-4 py-3">
-              <div className="font-medium text-gray-700 line-clamp-2">
+              <div className="line-clamp-2">
                 <p className="hidden lg:block">
                   {formatDate(item.lastReportDate, 'dd/MM/yyyy hh:mm a')}
                 </p>

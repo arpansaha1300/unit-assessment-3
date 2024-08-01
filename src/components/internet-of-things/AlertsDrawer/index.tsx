@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/react'
 import {
   ArrowLeftIcon,
@@ -10,26 +10,15 @@ import {
 } from '@heroicons/react/24/outline'
 import Drawer from '~common/Drawer'
 import { Accordion, AccordionButton, AccordionPanel } from '~common/Accordion'
-import RadioGroup from '../common/RadioGroup'
-import Divider from '../common/Divider'
-import BaseButton from '../base/BaseButon'
-import alerts from '~/assets/alerts'
-import { subDays } from 'date-fns'
+import Badge from './Badge'
 import formatDate from '~/utils/formatDate'
-import Badge from '../common/Badge'
-
-type IAlert = (typeof alerts)[number]
-
-enum SortOptions {
-  SEVERITY_HIGH_TO_LOW = 'SEVERITY_HIGH_TO_LOW',
-  SEVERITY_LOW_TO_HIGH = 'SEVERITY_LOW_TO_HIGH',
-}
-
-enum FilterOptions {
-  PREVIOUS_24_HOURS = 'PREVIOUS_24_HOURS',
-  PREVIOUS_7_DAYS = 'PREVIOUS_7_DAYS',
-  PREVIOUS_30_DAYS = 'PREVIOUS_30_DAYS',
-}
+import SortFilterPanel from './SortFilterPanel'
+import { sorters, SortOptions } from './sortOptions'
+import { FilterOptions, filters } from './filterOptions'
+import { SortFilterContext, useSortFilterContext } from './context'
+import { getBadgeType, getStartDate } from './utils'
+import alerts from '~/assets/alerts'
+import type { IAlert } from '~/types'
 
 interface AlertsDrawerProps {
   open: boolean
@@ -42,29 +31,6 @@ interface DrawerMainContentProps {
 
 interface SortFilterHeaderIconProps {
   handleClick: () => void
-}
-
-interface SortFilterPanelProps {
-  close: () => void
-}
-
-interface SortFilterContextType {
-  sortOption: SortOptions
-  setSortOption: React.Dispatch<React.SetStateAction<SortOptions>>
-  filterOption: FilterOptions
-  setFilterOption: React.Dispatch<React.SetStateAction<FilterOptions>>
-}
-
-const SortFilterContext = createContext<SortFilterContextType | undefined>(
-  undefined
-)
-
-const useSortFilterContext = (): SortFilterContextType => {
-  const context = useContext(SortFilterContext)
-  if (!context) {
-    throw new Error('useSortFilterContext must be used within AlertsDrawer')
-  }
-  return context
 }
 
 export default function AlertsDrawer(props: Readonly<AlertsDrawerProps>) {
@@ -132,48 +98,6 @@ function SortFilterHeaderIcon({
       <ArrowLeftIcon className="flex-shrink-0 size-5 text-gray-600" />
     </button>
   )
-}
-
-const sorters = {
-  [SortOptions.SEVERITY_HIGH_TO_LOW]: (a: IAlert, b: IAlert) => {
-    if (a.severity === 'HIGH') return -1
-    if (b.severity === 'HIGH') return 1
-    if (a.severity === 'MEDIUM') return -1
-    if (b.severity === 'MEDIUM') return 1
-    if (a.severity === 'LOW') return -1
-    return 1
-  },
-  [SortOptions.SEVERITY_LOW_TO_HIGH]: (a: IAlert, b: IAlert) => {
-    if (a.severity === 'HIGH') return 1
-    if (b.severity === 'HIGH') return -1
-    if (a.severity === 'MEDIUM') return 1
-    if (b.severity === 'MEDIUM') return -1
-    if (a.severity === 'LOW') return 1
-    return -1
-  },
-}
-
-const filters = {
-  [FilterOptions.PREVIOUS_24_HOURS]: (x: IAlert, startDate: Date) =>
-    startDate < new Date(x.date),
-  [FilterOptions.PREVIOUS_7_DAYS]: (x: IAlert, startDate: Date) =>
-    startDate < new Date(x.date),
-  [FilterOptions.PREVIOUS_30_DAYS]: (x: IAlert, startDate: Date) =>
-    startDate < new Date(x.date),
-}
-
-function getStartDate(unit: FilterOptions) {
-  const today = new Date()
-
-  if (unit === FilterOptions.PREVIOUS_24_HOURS) {
-    return subDays(today, 1)
-  }
-
-  if (unit === FilterOptions.PREVIOUS_7_DAYS) {
-    return subDays(today, 7)
-  }
-
-  return subDays(today, 30)
 }
 
 function DrawerMainContent({
@@ -296,97 +220,6 @@ function DrawerMainContent({
   )
 }
 
-function getBadgeType(severity: IAlert['severity']) {
-  if (severity === 'HIGH') return 'RED'
-  if (severity === 'MEDIUM') return 'ORANGE'
-  return 'YELLOW'
-}
-
-function SortFilterPanel({ close }: Readonly<SortFilterPanelProps>) {
-  const { sortOption, filterOption, setSortOption, setFilterOption } =
-    useSortFilterContext()
-
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault()
-
-    const formData = new FormData(e.currentTarget)
-    setSortOption(formData.get('sort') as SortOptions)
-    setFilterOption(formData.get('filter') as FilterOptions)
-
-    close()
-  }
-
-  return (
-    <form className="flex flex-col h-full" onSubmit={handleSubmit}>
-      <div>
-        <Accordion shouldOpen={true}>
-          <AccordionButton className="w-full flex justify-between items-center">
-            {({ open }) => (
-              <>
-                <p className="font-semibold text-sm">Sort by</p>
-
-                <div className="p-2">
-                  {open ? (
-                    <ChevronUpIcon className="flex-shrink-0 size-3" />
-                  ) : (
-                    <ChevronDownIcon className="flex-shrink-0 size-3" />
-                  )}
-                </div>
-              </>
-            )}
-          </AccordionButton>
-          <AccordionPanel className="mt-4">
-            <RadioGroup
-              radioList={sortOptions}
-              name="sort"
-              defaultChecked={sortOption}
-            />
-          </AccordionPanel>
-        </Accordion>
-
-        <div className="mt-6 mb-4">
-          <Divider />
-        </div>
-
-        <Accordion shouldOpen={true}>
-          <AccordionButton className="w-full flex justify-between items-center">
-            {({ open }) => (
-              <>
-                <p className="font-semibold text-sm">Filter by date range</p>
-
-                <div className="p-2">
-                  {open ? (
-                    <ChevronUpIcon className="flex-shrink-0 size-3" />
-                  ) : (
-                    <ChevronDownIcon className="flex-shrink-0 size-3" />
-                  )}
-                </div>
-              </>
-            )}
-          </AccordionButton>
-          <AccordionPanel className="mt-4">
-            <RadioGroup
-              radioList={filterOptions}
-              name="filter"
-              defaultChecked={filterOption}
-            />
-          </AccordionPanel>
-        </Accordion>
-      </div>
-
-      <div className="mt-auto space-y-2">
-        <BaseButton type="submit" stretch>
-          Apply filters
-        </BaseButton>
-
-        <BaseButton secondary stretch>
-          Cancel selection
-        </BaseButton>
-      </div>
-    </form>
-  )
-}
-
 const alertTabs = [
   {
     name: 'New alerts',
@@ -394,15 +227,4 @@ const alertTabs = [
   {
     name: 'Alert logs',
   },
-]
-
-const sortOptions = [
-  { id: SortOptions.SEVERITY_HIGH_TO_LOW, title: 'Severity (high → low)' },
-  { id: SortOptions.SEVERITY_LOW_TO_HIGH, title: 'Severity (low → high)' },
-]
-
-const filterOptions = [
-  { id: FilterOptions.PREVIOUS_7_DAYS, title: 'Previous 7 days' },
-  { id: FilterOptions.PREVIOUS_24_HOURS, title: 'Previous 24 hours' },
-  { id: FilterOptions.PREVIOUS_30_DAYS, title: 'Previous 30 days (all)' },
 ]

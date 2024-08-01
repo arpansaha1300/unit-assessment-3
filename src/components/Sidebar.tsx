@@ -167,7 +167,7 @@ function SidebarAccordion(props: Readonly<SidebarAccordionProps>) {
 
   return (
     <Accordion shouldOpen={hasOpenRoute}>
-      <AccordionButton className="flex items-center justify-between w-full hover:bg-gray-100 relative">
+      <AccordionButton className="flex items-center justify-between w-full hover:bg-gray-100">
         {({ open }) => (
           <>
             <div className="ml-1.5 p-2 flex items-center gap-4">
