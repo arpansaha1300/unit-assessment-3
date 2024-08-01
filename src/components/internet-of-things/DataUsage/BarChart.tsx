@@ -51,8 +51,6 @@ const renderCustomizedLabel = (props: any) => {
 export default function BarChart(props: Readonly<BarChartProps>) {
   const { data, xKey, yKey, labelKey, xUnit } = props
 
-  console.log(data)
-
   return (
     <ResponsiveContainer width="100%" height="100%">
       <ReBarChart

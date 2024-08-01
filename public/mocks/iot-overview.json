@@ -1,0 +1,28 @@
+{
+  "deviceDetailsExperience": [
+    {
+      "sims": {
+        "active": 180000,
+        "inactive": 20000,
+        "totalSimCount": 200000
+      },
+      "simStatus": {
+        "active": 160000,
+        "suspended": 20000,
+        "cancelled": 20000,
+        "lastUpdatedDate": "2021-09-01T10:00:00Z"
+      },
+      "simConnectivity": {
+        "connected": 150000,
+        "disconnected": 30000,
+        "lastUpdatedDate": "2021-09-01T10:00:00Z"
+      },
+      "networkData": [
+        {
+          "latencyAverage": 50,
+          "lastUpdatedDate": "2021-09-05T10:00:00Z"
+        }
+      ]
+    }
+  ]
+}

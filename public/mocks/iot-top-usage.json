@@ -1,0 +1,27 @@
+{
+  "usageDataList": [
+    {
+      "financialAccountNumber": "768768768767",
+      "usages": [
+        {
+          "mobileNumber": 1233546,
+          "mobileNumberStatus": "Active",
+          "dataUsage": 5,
+          "position": 1
+        },
+        {
+          "mobileNumber": 1233556,
+          "mobileNumberStatus": "Deactivated",
+          "dataUsage": 5,
+          "position": 1
+        },
+        {
+          "mobileNumber": 1233546,
+          "mobileNumberStatus": "Active",
+          "dataUsage": 5,
+          "position": 1
+        }
+      ]
+    }
+  ]
+}

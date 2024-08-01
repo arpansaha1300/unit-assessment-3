@@ -7,7 +7,7 @@ export interface RequestOptions extends Omit<RequestInit, 'body' | 'method'> {
   body?: Record<string, any>
 }
 
-export const FETCH_BASE_URL = 'http://localhost:4000/api/'
+export const FETCH_BASE_URL = 'http://localhost:3000/'
 
 export default function createRequest(
   url: string,

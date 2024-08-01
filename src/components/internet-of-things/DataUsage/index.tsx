@@ -9,12 +9,15 @@ import formatDate from '~/utils/formatDate'
 import SelectMenu from './SelectMenu'
 import { SubDateUnit } from './types'
 import { dataUsageDefaultData } from '~/assets/data'
+import _fetch from '~/utils/_fetch'
+
+type TData = (typeof dataUsageDefaultData.dataUsageGraphResponse)[0]
 
 type TDataUsage =
   (typeof dataUsageDefaultData.dataUsageGraphResponse)[number]['dataUsage']
 
 export default function DataUsage() {
-  const [data] = useState(dataUsageDefaultData.dataUsageGraphResponse[0])
+  const [data, setData] = useState<TData | null>(null)
   const [filteredDataUsage, setFilteredDataUsage] = useState(
     [] as unknown as TDataUsage
   )
@@ -22,6 +25,14 @@ export default function DataUsage() {
   const [selected, setSelected] = useState(selectMenulist[0])
 
   useEffect(() => {
+    _fetch('mocks/data-usage.json').then(res => {
+      setData(res.dataUsageGraphResponse[0])
+    })
+  }, [])
+
+  useEffect(() => {
+    if (!data) return
+
     const today = new Date()
     const startDate = getStartDate(selected.value, selected.unit)
     let newList = data.dataUsage.filter(item => {
@@ -33,10 +44,11 @@ export default function DataUsage() {
     }
     sortByDate(newList)
     setFilteredDataUsage(newList)
-  }, [data.dataUsage, selected])
+  }, [data, selected])
 
-  const stats = useMemo(
-    () => [
+  const stats = useMemo(() => {
+    if (!data) return []
+    return [
       {
         name: 'Total usage',
         value: `${kFormatter(data.totalDataUsage)} GB`,
@@ -45,9 +57,8 @@ export default function DataUsage() {
         name: 'Daily average',
         value: `${kFormatter(data.dataAverage)} GB`,
       },
-    ],
-    [data]
-  )
+    ]
+  }, [data])
 
   return (
     <section className="h-full">

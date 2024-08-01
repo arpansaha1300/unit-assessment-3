@@ -1,8 +1,9 @@
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/20/solid'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import classNames from '~/utils/classNames'
 import Card from '~common/Card'
 import { iotTopUsage } from '~/assets/data'
+import _fetch from '~/utils/_fetch'
 
 interface StatusProps {
   active: boolean
@@ -19,7 +20,13 @@ const headings = Object.freeze(
 ) as (keyof typeof headingsMap)[]
 
 export default function TopUsage() {
-  const [data] = useState(iotTopUsage.usageDataList[0].usages)
+  const [data, setData] = useState(iotTopUsage.usageDataList[0].usages)
+
+  useEffect(() => {
+    _fetch('mocks/iot-top-usage.json').then(res => {
+      setData(res.usageDataList[0].usages)
+    })
+  }, [])
 
   return (
     <section className="h-full">
