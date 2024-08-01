@@ -14,7 +14,7 @@ import Badge from './Badge'
 import formatDate from '~/utils/formatDate'
 import SortFilterPanel from './SortFilterPanel'
 import { sorters, SortOptions } from './sortOptions'
-import { FilterOptions, filters } from './filterOptions'
+import { FilterOptions } from './filterOptions'
 import { SortFilterContext, useSortFilterContext } from './context'
 import { getBadgeType, getStartDate } from './utils'
 import alerts from '~/assets/alerts'
@@ -109,16 +109,14 @@ function DrawerMainContent({
 
   useEffect(() => {
     const startDate = getStartDate(filterOption)
-    const newAlerts = alerts.filter(alert =>
-      filters[filterOption](alert, startDate)
-    )
+    const newAlerts = alerts.filter(alert => startDate < new Date(alert.date))
     newAlerts.sort(sorters[sortOption])
     setProcessedAlerts(newAlerts)
   }, [sortOption, filterOption])
 
   function clearFilters() {
     setSortOption(SortOptions.SEVERITY_HIGH_TO_LOW)
-    setFilterOption(FilterOptions.PREVIOUS_7_DAYS)
+    setFilterOption(FilterOptions.PREVIOUS_24_HOURS)
   }
 
   return (
