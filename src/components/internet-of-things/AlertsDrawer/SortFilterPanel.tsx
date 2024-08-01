@@ -94,7 +94,7 @@ export default function SortFilterPanel({
           Apply filters
         </BaseButton>
 
-        <BaseButton secondary stretch>
+        <BaseButton secondary stretch onClick={close}>
           Cancel selection
         </BaseButton>
       </div>

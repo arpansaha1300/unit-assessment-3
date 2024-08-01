@@ -1,7 +1,7 @@
 import classNames from '~/utils/classNames'
 
 interface BaseButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'className'> {
   type?: 'button' | 'submit'
   stretch?: boolean
   secondary?: boolean
@@ -14,6 +14,7 @@ export default function BaseButton(props: Readonly<BaseButtonProps>) {
     type = 'button',
     stretch = false,
     secondary = false,
+    ...attrs
   } = props
 
   return (
@@ -26,6 +27,7 @@ export default function BaseButton(props: Readonly<BaseButtonProps>) {
           ? 'hover:bg-gray-100 ring-2 ring-inset ring-gray-800'
           : 'bg-brand-primary text-gray-50'
       )}
+      {...attrs}
     >
       {children}
     </button>
