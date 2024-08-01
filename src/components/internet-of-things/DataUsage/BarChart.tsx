@@ -40,9 +40,10 @@ const renderCustomizedLabel = (props: any) => {
       y={y - radius}
       textAnchor="middle"
       dominantBaseline="middle"
-      className="text-xs text-gray-500"
+      fill="#6b7280"
+      className="text-xs"
     >
-      {value}
+      {value} GB
     </text>
   )
 }
@@ -50,12 +51,29 @@ const renderCustomizedLabel = (props: any) => {
 export default function BarChart(props: Readonly<BarChartProps>) {
   const { data, xKey, yKey, labelKey, xUnit } = props
 
+  console.log(data)
+
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <ReBarChart width={150} height={40} data={data} barSize={16}>
+      <ReBarChart
+        width={150}
+        height={40}
+        data={data}
+        barSize={16}
+        margin={{
+          top: 10,
+          right: 0,
+          left: 0,
+          bottom: 10,
+        }}
+      >
         <CartesianGrid strokeDasharray="3 3" vertical={false} />
-        <XAxis dataKey={xKey} tick={<XTick unit={xUnit} />} />
-        <YAxis dataKey={yKey} className="text-xs text-gray-500" />
+        <XAxis dataKey={xKey} tick={<XTick unit={xUnit} />} interval={0} />
+        <YAxis
+          dataKey={yKey}
+          axisLine={false}
+          className="text-xs text-gray-500"
+        />
         <Bar dataKey={labelKey} fill="#F6288F" radius={[4, 4, 0, 0]}>
           <LabelList
             dataKey={labelKey}
@@ -72,38 +90,32 @@ function XTick(props: any) {
   const { x, y, payload, unit } = props
 
   return (
-    <>
-      <g transform={`translate(${x},${y})`}>
+    <g transform={`translate(${x},${y})`}>
+      <text
+        x={0}
+        y={0}
+        dy={12}
+        textAnchor="middle"
+        fill="#6b7280"
+        className="text-xs"
+      >
+        {unit === SubDateUnit.DAY
+          ? dayAbbreviations[formatDate(payload.value, 'eeee') as WeekDays]
+          : formatDate(payload.value, 'MMM')}
+      </text>
+
+      {unit === SubDateUnit.DAY && (
         <text
           x={0}
           y={0}
-          dx={8}
-          dy={12}
-          textAnchor="end"
+          dy={26}
+          textAnchor="middle"
           fill="#6b7280"
           className="text-xs"
         >
-          {unit === SubDateUnit.DAY
-            ? dayAbbreviations[formatDate(payload.value, 'eeee') as WeekDays]
-            : formatDate(payload.value, 'MMM')}
+          {formatDate(payload.value, 'd/M')}
         </text>
-      </g>
-
-      {unit === SubDateUnit.DAY && (
-        <g transform={`translate(${x},${y})`}>
-          <text
-            x={0}
-            y={0}
-            dx={10}
-            dy={26}
-            textAnchor="end"
-            fill="#6b7280"
-            className="text-xs"
-          >
-            {formatDate(payload.value, 'd/M')}
-          </text>
-        </g>
       )}
-    </>
+    </g>
   )
 }
