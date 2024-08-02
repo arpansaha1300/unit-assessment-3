@@ -156,13 +156,13 @@ const selectMenulist = [
   {
     id: 2,
     name: 'Last 3 months',
-    value: 7,
+    value: 3,
     unit: SubDateUnit.MONTH,
   },
   {
     id: 3,
     name: 'Last 6 months',
-    value: 7,
+    value: 6,
     unit: SubDateUnit.MONTH,
   },
 ]
