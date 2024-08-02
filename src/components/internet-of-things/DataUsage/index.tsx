@@ -99,7 +99,7 @@ export default function DataUsage() {
 
         <Stats stats={stats} columns={2} className="mt-4" />
 
-        <div className="flex-grow mt-10 w-full min-h-64">
+        <div className="flex-grow mt-6 w-full min-h-64">
           <BarChart
             data={filteredDataUsage}
             xKey="date"

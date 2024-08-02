@@ -9,6 +9,7 @@ import {
 } from 'recharts'
 import formatDate from '~/utils/formatDate'
 import { SubDateUnit } from './types'
+import kFormatter from '~/utils/kFormatter'
 
 interface BarChartProps {
   data: any[]
@@ -41,7 +42,7 @@ const renderCustomizedLabel = (props: any) => {
       textAnchor="middle"
       dominantBaseline="middle"
       fill="#6b7280"
-      className="hidden sm:block text-xs"
+      className="hidden sm:block text-[10px]"
     >
       {value} GB
     </text>
@@ -59,19 +60,15 @@ export default function BarChart(props: Readonly<BarChartProps>) {
         data={data}
         barSize={16}
         margin={{
-          top: 10,
+          top: 18,
           right: 0,
-          left: -15,
+          left: -18,
           bottom: 10,
         }}
       >
         <CartesianGrid strokeDasharray="3 3" vertical={false} />
         <XAxis dataKey={xKey} tick={<XTick unit={xUnit} />} interval={0} />
-        <YAxis
-          dataKey={yKey}
-          axisLine={false}
-          className="text-xs text-gray-500"
-        />
+        <YAxis dataKey={yKey} axisLine={false} tick={<YTick />} />
         <Bar dataKey={labelKey} fill="#F6288F" radius={[4, 4, 0, 0]}>
           <LabelList
             dataKey={labelKey}
@@ -91,11 +88,10 @@ function XTick(props: any) {
     <g transform={`translate(${x},${y})`}>
       <text
         x={0}
-        y={0}
-        dy={12}
+        y={12}
         textAnchor="middle"
         fill="#6b7280"
-        className="text-xs"
+        className="text-[10px]"
       >
         {unit === SubDateUnit.DAY
           ? dayAbbreviations[formatDate(payload.value, 'eeee') as WeekDays]
@@ -109,11 +105,25 @@ function XTick(props: any) {
           dy={26}
           textAnchor="middle"
           fill="#6b7280"
-          className="text-xs"
+          className="text-[10px]"
         >
           {formatDate(payload.value, 'd/M')}
         </text>
       )}
+    </g>
+  )
+}
+
+const DUMMY_COST_PER_GB = 500
+
+function YTick(props: any) {
+  const { x, y, payload } = props
+
+  return (
+    <g transform={`translate(${x},${y})`}>
+      <text x={0} y={3} textAnchor="end" fill="#6b7280" className="text-[10px]">
+        ${kFormatter(payload.value * DUMMY_COST_PER_GB)}
+      </text>
     </g>
   )
 }
