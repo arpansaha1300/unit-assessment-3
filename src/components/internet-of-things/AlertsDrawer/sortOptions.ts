@@ -1,4 +1,4 @@
-import { IAlert } from '~/types'
+import { IAlert } from '~/store/features/alerts/alertsApiSlice'
 
 export enum SortOptions {
   SEVERITY_HIGH_TO_LOW = 'SEVERITY_HIGH_TO_LOW',

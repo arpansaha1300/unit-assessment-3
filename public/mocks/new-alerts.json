@@ -1,0 +1,100 @@
+[
+  {
+    "id": "001",
+    "title": "System Update",
+    "description": "A scheduled system update will occur tonight between 2 AM and 4 AM. During this time, the service may be temporarily unavailable.",
+    "date": "2024-07-31 12:45 PM",
+    "severity": "MEDIUM"
+  },
+  {
+    "id": "002",
+    "title": "Security Alert",
+    "description": "Unusual login activity has been detected on your account. Please review recent login attempts and change your password if necessary.",
+    "date": "2024-07-30 04:34 AM",
+    "severity": "HIGH"
+  },
+  {
+    "id": "003",
+    "title": "Maintenance Window",
+    "description": "Planned maintenance on the payment gateway will be carried out from 1 AM to 3 AM. Please complete any transactions before this time.",
+    "date": "2024-08-01 10:23 PM",
+    "severity": "MEDIUM"
+  },
+  {
+    "id": "004",
+    "title": "New Feature Release",
+    "description": "We are excited to announce a new feature in our app: real-time notifications! Update your app to experience the new functionality.",
+    "date": "2024-07-29 02:45 AM",
+    "severity": "LOW"
+  },
+  {
+    "id": "005",
+    "title": "Data Backup",
+    "description": "A full data backup will take place tonight from 11 PM to 1 AM. You may experience slower performance during this time.",
+    "date": "2024-07-31 08:00 PM",
+    "severity": "LOW"
+  },
+  {
+    "id": "006",
+    "title": "Server Outage",
+    "description": "Our servers will be down for maintenance from 3 AM to 5 AM. We apologize for any inconvenience this may cause.",
+    "date": "2024-08-01 01:30 AM",
+    "severity": "HIGH"
+  },
+  {
+    "id": "007",
+    "title": "Password Change Required",
+    "description": "For security reasons, please change your password within the next 24 hours.",
+    "date": "2024-07-31 09:15 AM",
+    "severity": "MEDIUM"
+  },
+  {
+    "id": "008",
+    "title": "App Update Available",
+    "description": "A new version of the app is available with bug fixes and performance improvements. Please update to the latest version.",
+    "date": "2024-07-30 11:00 AM",
+    "severity": "LOW"
+  },
+  {
+    "id": "009",
+    "title": "Phishing Alert",
+    "description": "Suspicious email activity has been detected. Do not click on any links and report the email to our support team.",
+    "date": "2024-07-31 03:25 PM",
+    "severity": "HIGH"
+  },
+  {
+    "id": "010",
+    "title": "Service Interruption",
+    "description": "We are currently experiencing service interruptions. Our team is working to resolve the issue as quickly as possible.",
+    "date": "2024-08-01 05:00 PM",
+    "severity": "MEDIUM"
+  },
+  {
+    "id": "011",
+    "title": "Holiday Schedule",
+    "description": "Please note that our support team will be unavailable on August 1st due to a public holiday.",
+    "date": "2024-07-31 10:00 AM",
+    "severity": "LOW"
+  },
+  {
+    "id": "012",
+    "title": "System Upgrade",
+    "description": "We will be upgrading our systems on August 2nd from 12 AM to 6 AM. Expect possible delays during this time.",
+    "date": "2024-07-31 07:45 PM",
+    "severity": "MEDIUM"
+  },
+  {
+    "id": "013",
+    "title": "Feature Deprecated",
+    "description": "The feature you have been using will be deprecated starting August 5th. Please switch to the new feature available in the latest update.",
+    "date": "2024-07-30 04:00 PM",
+    "severity": "LOW"
+  },
+  {
+    "id": "014",
+    "title": "Service Announcement",
+    "description": "We are enhancing our services to provide better performance. Expect minor disruptions from 2 AM to 4 AM.",
+    "date": "2024-08-01 09:00 PM",
+    "severity": "LOW"
+  }
+]

@@ -1,6 +1,6 @@
 import { subDays } from 'date-fns'
 import { FilterOptions } from './filterOptions'
-import type { IAlert } from '~/types'
+import { IAlert } from '~/store/features/alerts/alertsApiSlice'
 
 export function getBadgeType(severity: IAlert['severity']) {
   if (severity === 'HIGH') return 'RED'

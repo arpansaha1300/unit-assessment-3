@@ -17,7 +17,11 @@ export const alertsApiSlice = createApi({
       query: () => `/alerts.json`,
       providesTags: (_result, _error) => [{ type: 'alerts' }],
     }),
+    getNewAlerts: build.query<IAlert[], void>({
+      query: () => `/new-alerts.json`,
+      providesTags: (_result, _error) => [{ type: 'alerts' }],
+    }),
   }),
 })
 
-export const { useGetAlertsQuery } = alertsApiSlice
+export const { useGetAlertsQuery, useGetNewAlertsQuery } = alertsApiSlice

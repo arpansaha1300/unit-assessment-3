@@ -99,7 +99,7 @@ const sidebarItems: (ITab | ISeparator | IAccordion)[] = [
 
 export default function Sidebar() {
   return (
-    <nav className="bg-white h-full">
+    <nav className="">
       <ul className="py-2 space-y-1.5">
         {sidebarItems.map((item, i) => (
           <li key={i}>

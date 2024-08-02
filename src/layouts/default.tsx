@@ -12,7 +12,7 @@ export default function DefaultLayout() {
       <Navbar setSidebarOpen={setSidebarOpen} />
 
       <div className="flex-grow h-full sm:grid sm:grid-cols-7 lg:grid-cols-6">
-        <div className="hidden sm:block col-span-2 lg:col-span-1 h-full">
+        <div className="hidden sm:block col-span-2 lg:col-span-1 h-full bg-white relative">
           <Sidebar />
         </div>
 
