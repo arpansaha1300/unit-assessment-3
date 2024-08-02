@@ -4,6 +4,8 @@ import classNames from '~/utils/classNames'
 import Card from '~common/Card'
 import { iotTopUsage } from '~/assets/data'
 import _fetch from '~/utils/_fetch'
+import { useGetTopUsageQuery } from '~/store/features/top-usage/topUsageApiSlice'
+import Loader from '../common/Loader'
 
 interface StatusProps {
   active: boolean
@@ -20,13 +22,27 @@ const headings = Object.freeze(
 ) as (keyof typeof headingsMap)[]
 
 export default function TopUsage() {
-  const [data, setData] = useState(iotTopUsage.usageDataList[0].usages)
+  const { data, isLoading, isError, isSuccess } = useGetTopUsageQuery()
 
-  useEffect(() => {
-    _fetch('mocks/iot-top-usage.json').then(res => {
-      setData(res.usageDataList[0].usages)
-    })
-  }, [])
+  if (isLoading) {
+    return (
+      <section>
+        <Card className="h-96 flex items-center justify-center">
+          <Loader dark className="size-5" />
+        </Card>
+      </section>
+    )
+  }
+
+  if (isError || !isSuccess) {
+    return (
+      <section>
+        <Card className="h-96 flex items-center justify-center">
+          <p className="text-sm font-semibold">Something went wrong!</p>
+        </Card>
+      </section>
+    )
+  }
 
   return (
     <section className="h-full">

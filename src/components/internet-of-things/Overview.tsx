@@ -1,17 +1,14 @@
 import { useMemo } from 'react'
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
 import Card from '~common/Card'
+import Loader from '~common/Loader'
 import Divider from '~common/Divider'
 import PieChart from '~/components/internet-of-things/PieChart'
 import Stats from './Stats'
 import kFormatter from '~/utils/kFormatter'
 import formatDate from '~/utils/formatDate'
 import calcPercent from '~/utils/calcPercent'
-import type { iotOverview } from '~/assets/data'
-
-interface OverviewProps {
-  deviceDetails: (typeof iotOverview)['deviceDetailsExperience'][number]
-}
+import { useGetIotOverviewQuery } from '~/store/features/iot-overview/iotOverviewApiSlice'
 
 interface PieDataProps {
   pieData: any[]
@@ -19,49 +16,75 @@ interface PieDataProps {
   centerLabel: React.ReactNode
 }
 
-export default function Overview(props: Readonly<OverviewProps>) {
-  const { deviceDetails } = props
+export default function Overview() {
+  const { data, isLoading, isError, isSuccess } = useGetIotOverviewQuery()
 
-  const stats = useMemo(
-    () => [
+  const stats = useMemo(() => {
+    if (!isSuccess) return []
+    return [
       {
         name: 'Total SIMs',
-        value: kFormatter(deviceDetails.sims.totalSimCount),
+        value: kFormatter(data.sims.totalSimCount),
       },
       {
         name: 'Active SIMs',
-        value: kFormatter(deviceDetails.sims.active),
+        value: kFormatter(data.sims.active),
       },
       {
         name: 'Inactive SIMs',
-        value: kFormatter(deviceDetails.sims.inactive),
+        value: kFormatter(data.sims.inactive),
       },
-    ],
-    [deviceDetails.sims]
-  )
+    ]
+  }, [data, isSuccess])
 
-  const simStatusPie = [
-    {
-      name: 'Active',
-      value: deviceDetails.simStatus.active,
-    },
-    {
-      name: 'Suspended',
-      value: deviceDetails.simStatus.suspended,
-    },
-    {
-      name: 'Cancelled',
-      value: deviceDetails.simStatus.cancelled,
-    },
-  ]
+  const simStatusPie = useMemo(() => {
+    if (!isSuccess) return []
+    return [
+      {
+        name: 'Active',
+        value: data.simStatus.active,
+      },
+      {
+        name: 'Suspended',
+        value: data.simStatus.suspended,
+      },
+      {
+        name: 'Cancelled',
+        value: data.simStatus.cancelled,
+      },
+    ]
+  }, [data, isSuccess])
 
-  const simConnectivityPie = [
-    { name: 'Connected', value: deviceDetails.simConnectivity.connected },
-    {
-      name: 'Disconnected',
-      value: deviceDetails.simConnectivity.disconnected,
-    },
-  ]
+  const simConnectivityPie = useMemo(() => {
+    if (!isSuccess) return []
+    return [
+      { name: 'Connected', value: data.simConnectivity.connected },
+      {
+        name: 'Disconnected',
+        value: data.simConnectivity.disconnected,
+      },
+    ]
+  }, [data, isSuccess])
+
+  if (isLoading) {
+    return (
+      <section className="h-full">
+        <Card className="h-full flex items-center justify-center">
+          <Loader dark className="size-5" />
+        </Card>
+      </section>
+    )
+  }
+
+  if (isError || !isSuccess) {
+    return (
+      <section className="h-full">
+        <Card className="h-full flex items-center justify-center">
+          <p className="text-sm font-semibold">Something went wrong!</p>
+        </Card>
+      </section>
+    )
+  }
 
   return (
     <section>
@@ -70,8 +93,7 @@ export default function Overview(props: Readonly<OverviewProps>) {
           <h2 className="text-lg font-bold">Overview</h2>
           <div className="flex items-center gap-4">
             <p className="text-xs">
-              Last updated:{' '}
-              {formatDate(deviceDetails.networkData[0].lastUpdatedDate)}
+              Last updated: {formatDate(data.networkData[0].lastUpdatedDate)}
             </p>
             <ArrowTopRightOnSquareIcon className="flex-shrink-0 size-4" />
           </div>
@@ -83,17 +105,16 @@ export default function Overview(props: Readonly<OverviewProps>) {
           <div className="flex-grow">
             <h3 className="font-bold">SIMs status</h3>
             <p className="text-xs">
-              Last updated:{' '}
-              {formatDate(deviceDetails.simStatus.lastUpdatedDate)}
+              Last updated: {formatDate(data.simStatus.lastUpdatedDate)}
             </p>
 
             <PieData
               pieData={simStatusPie}
-              totalSimCount={deviceDetails.sims.totalSimCount}
+              totalSimCount={data.sims.totalSimCount}
               centerLabel={
                 <>
                   <p className="text-xl text-center font-bold">
-                    {kFormatter(deviceDetails.sims.totalSimCount)}
+                    {kFormatter(data.sims.totalSimCount)}
                   </p>
                   <p className="text-xs text-center">Total SIMs</p>
                 </>
@@ -112,17 +133,16 @@ export default function Overview(props: Readonly<OverviewProps>) {
           <div className="flex-grow">
             <h3 className="font-bold">SIMs connectivity</h3>
             <p className="text-xs">
-              Last updated:{' '}
-              {formatDate(deviceDetails.simConnectivity.lastUpdatedDate)}
+              Last updated: {formatDate(data.simConnectivity.lastUpdatedDate)}
             </p>
 
             <PieData
               pieData={simConnectivityPie}
-              totalSimCount={deviceDetails.sims.totalSimCount}
+              totalSimCount={data.sims.totalSimCount}
               centerLabel={
                 <>
                   <p className="text-xl text-center font-bold">
-                    {kFormatter(deviceDetails.sims.active)}
+                    {kFormatter(data.sims.active)}
                   </p>
                   <p className="text-xs text-center">Active SIMs</p>
                 </>

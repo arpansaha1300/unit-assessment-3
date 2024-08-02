@@ -8,10 +8,12 @@ import {
 import BaseInput from '~base/BaseInput'
 import Card from '~common/Card'
 import classNames from '~/utils/classNames'
-import { iotReport } from '~/assets/data'
 import formatDate from '~/utils/formatDate'
-
-type TReportRow = (typeof iotReport.reportList)[number]['reportData'][number]
+import {
+  IReportData,
+  useGetReportsQuery,
+} from '~/store/features/reports/reportsApiSlice'
+import Loader from '../common/Loader'
 
 interface PaginationIconProps {
   icon: any
@@ -20,7 +22,7 @@ interface PaginationIconProps {
 }
 
 interface ReportsTableProps {
-  data: (typeof iotReport)['reportList'][number]['reportData']
+  data: IReportData[]
   searchValue: string
 }
 
@@ -33,17 +35,19 @@ interface HighlightProps {
 const rowsPerPage = 10
 
 export default function Reports() {
-  const [data] = useState(iotReport.reportList[0].reportData)
-  const [filteredData, setFilteredData] = useState(data)
+  const { data, isError, isLoading, isSuccess } = useGetReportsQuery()
+  const [filteredData, setFilteredData] = useState<IReportData[]>([])
   const [page, setPage] = useState(1)
   const [pageCount, setPageCount] = useState(0)
-  const [slicedData, setSlicedData] = useState<TReportRow[]>([])
+  const [slicedData, setSlicedData] = useState<IReportData[]>([])
   const [searchValue, setSearchValue] = useState('')
 
   const pageInputRef = useRef<HTMLInputElement | null>(null)
 
   useEffect(() => {
-    const regex = new RegExp(`(${searchValue})`, 'gi')
+    if (!isSuccess) return
+
+    const regex = new RegExp(`(${searchValue})`, 'i')
     let newData = data
 
     if (searchValue) {
@@ -58,7 +62,7 @@ export default function Reports() {
     setFilteredData(newData)
     setPage(1)
     if (pageInputRef.current) pageInputRef.current.value = String(1)
-  }, [searchValue, data])
+  }, [searchValue, data, isSuccess])
 
   useEffect(() => {
     const startIdx = (page - 1) * rowsPerPage
@@ -69,7 +73,25 @@ export default function Reports() {
     setPageCount(Math.ceil(filteredData.length / rowsPerPage))
   }, [filteredData.length])
 
-  useEffect(() => {}, [searchValue])
+  if (isLoading) {
+    return (
+      <section>
+        <Card className="h-96 flex items-center justify-center">
+          <Loader dark className="size-5" />
+        </Card>
+      </section>
+    )
+  }
+
+  if (isError || !isSuccess) {
+    return (
+      <section>
+        <Card className="h-96 flex items-center justify-center">
+          <p className="text-sm font-semibold">Something went wrong!</p>
+        </Card>
+      </section>
+    )
+  }
 
   function onPageChange(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()

@@ -17,8 +17,12 @@ import { sorters, SortOptions } from './sortOptions'
 import { FilterOptions } from './filterOptions'
 import { SortFilterContext, useSortFilterContext } from './context'
 import { getBadgeType, getStartDate } from './utils'
-import alerts from '~/assets/alerts'
-import type { IAlert } from '~/types'
+import {
+  type IAlert,
+  useGetAlertsQuery,
+} from '~/store/features/alerts/alertsApiSlice'
+import Card from '~/components/common/Card'
+import Loader from '~/components/common/Loader'
 
 interface AlertsDrawerProps {
   open: boolean
@@ -106,17 +110,36 @@ function DrawerMainContent({
   const { sortOption, filterOption, setSortOption, setFilterOption } =
     useSortFilterContext()
   const [processedAlerts, setProcessedAlerts] = useState([] as IAlert[])
+  const { data, isLoading, isError, isSuccess } = useGetAlertsQuery()
 
   useEffect(() => {
+    if (!isSuccess) return
+
     const startDate = getStartDate(filterOption)
-    const newAlerts = alerts.filter(alert => startDate < new Date(alert.date))
+    const newAlerts = data.filter(alert => startDate < new Date(alert.date))
     newAlerts.sort(sorters[sortOption])
     setProcessedAlerts(newAlerts)
-  }, [sortOption, filterOption])
+  }, [sortOption, filterOption, isSuccess, data])
 
   function clearFilters() {
     setSortOption(SortOptions.SEVERITY_HIGH_TO_LOW)
     setFilterOption(FilterOptions.PREVIOUS_24_HOURS)
+  }
+
+  if (isLoading) {
+    return (
+      <div className="p-4 flex justify-center">
+        <Loader dark className="size-5" />
+      </div>
+    )
+  }
+
+  if (isError || !isSuccess) {
+    return (
+      <div className="p-4 flex justify-center">
+        <p className="text-sm font-semibold">Something went wrong!</p>
+      </div>
+    )
   }
 
   return (

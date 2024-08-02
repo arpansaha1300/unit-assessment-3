@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { BellIcon } from '@heroicons/react/24/solid'
+import Card from '~common/Card'
+import Loader from '~common/Loader'
 import Breadcrumb from '~common/Breadcrumb'
 import DataUsage from '~/components/internet-of-things/DataUsage'
 import Overview from '~/components/internet-of-things/Overview'
 import Reports from '~/components/internet-of-things/Reports'
 import TopUsage from '~/components/internet-of-things/TopUsage'
 import AlertsDrawer from '~/components/internet-of-things/AlertsDrawer'
-import { iotOverview } from '~/assets/data'
+import { useGetIotOverviewQuery } from '~/store/features/iot-overview/iotOverviewApiSlice'
 
 export function Component() {
   const [drawerOpen, setDrawerOpen] = useState(false)
@@ -47,11 +49,9 @@ export function Component() {
       </div>
 
       <div className="mt-6 lg:mt-10 grid grid-cols-1 lg:grid-cols-2 gap-5">
-        {iotOverview.deviceDetailsExperience.map((details, i) => (
-          <div key={i} className="lg:col-span-2">
-            <Overview deviceDetails={details} />
-          </div>
-        ))}
+        <div className="lg:col-span-2">
+          <Overview />
+        </div>
 
         <DataUsage />
 
