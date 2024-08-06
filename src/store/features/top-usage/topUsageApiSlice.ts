@@ -17,7 +17,9 @@ interface ITopUsageResponse {
 }
 
 export const topUsageApiSlice = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/mocks' }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: import.meta.env.VITE_API_BASE_URL + '/mocks',
+  }),
   reducerPath: 'top-usage',
   tagTypes: ['top-usage'],
   endpoints: build => ({

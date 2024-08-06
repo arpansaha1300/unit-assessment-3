@@ -9,7 +9,9 @@ export interface IAlert {
 }
 
 export const alertsApiSlice = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/mocks' }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: import.meta.env.VITE_API_BASE_URL + '/mocks',
+  }),
   reducerPath: 'alerts',
   tagTypes: ['alerts'],
   endpoints: build => ({

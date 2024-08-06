@@ -18,7 +18,9 @@ type IDataUsageResponse = {
 }
 
 export const dataUsageApiSlice = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/mocks' }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: import.meta.env.VITE_API_BASE_URL + '/mocks',
+  }),
   reducerPath: 'data-usage',
   tagTypes: ['data-usage'],
   endpoints: build => ({

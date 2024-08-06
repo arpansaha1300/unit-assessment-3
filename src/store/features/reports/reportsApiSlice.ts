@@ -18,7 +18,9 @@ type IReportList = {
 }
 
 export const reportsApiSlice = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/mocks' }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: import.meta.env.VITE_API_BASE_URL + '/mocks',
+  }),
   reducerPath: 'reports',
   tagTypes: ['reports'],
   endpoints: build => ({

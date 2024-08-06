@@ -36,7 +36,9 @@ type DeviceDetails = {
 }
 
 export const iotOverviewApiSlice = createApi({
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000/mocks' }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: import.meta.env.VITE_API_BASE_URL + '/mocks',
+  }),
   reducerPath: 'iot-overview',
   tagTypes: ['iot-overview'],
   endpoints: build => ({
